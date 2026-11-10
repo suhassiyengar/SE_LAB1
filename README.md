@@ -1,4 +1,4 @@
-# Lab 5: Static Code Analysis — Course Enrollment System
+# SE_LAB1 — Lab 5: Static Code Analysis — Course Enrollment System
 
 **Your file:** `course_enrollment_system.py`
 
