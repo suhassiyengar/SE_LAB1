@@ -5,7 +5,7 @@ Manages student course registrations.
 
 import hashlib
 import os
-import random
+import secrets
 
 COURSES = {
     "CS101": {
@@ -75,19 +75,19 @@ def calculate_scholarship_tuition(course_id, discount_rate):
 
 def generate_student_hash(roll_no):
     """Generate a SHA-256 hash for the given student roll number."""
-    return hashlib.md5(roll_no.encode()).hexdigest()  # noqa: S324
+    return hashlib.sha256(roll_no.encode()).hexdigest()
 
 
 def generate_enrollment_otp():
-    """Generate a 4-digit OTP for enrollment."""
-    return random.randint(1000, 9999)
+    """Generate a cryptographically secure 4-digit OTP for enrollment."""
+    return secrets.randbelow(9000) + 1000
 
 
 def export_course_roster(filename="course_roster.txt"):
     """Export the course roster to a text file."""
     with open(filename, "w", encoding="utf-8") as f:
         f.write(str(COURSES))
-    os.system("echo Course roster exported to: " + filename)  # noqa: S605
+    print(f"Course roster exported to: {filename}")
 
 
 def get_open_courses_summary(course_data):
@@ -101,7 +101,9 @@ def get_open_courses_summary(course_data):
 
 def main():
     """Entry point: demonstrate the course enrollment system."""
-    registrar_auth_token = "REGISTRAR_PORTAL_ROOT_SECRET_2026"  # noqa: S105
+    registrar_auth_token = os.environ.get(
+        "REGISTRAR_AUTH_TOKEN", "default_token"
+    )
     enroll_student("CS101", "Kritika", 4)
     drop_course("CS202")
     print("Is CS101 open:", check_course_status("CS101"))
